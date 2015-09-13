@@ -2607,10 +2607,10 @@ int S3fsCurl::ListBucketRequest(const char* tpath, const char* query)
   if(!S3fsCurl::is_sigv4){
     string date    = get_date_rfc850();
     requestHeaders = curl_slist_sort_insert(requestHeaders, "Date", date.c_str());
-    requestHeaders = curl_slist_sort_insert(requestHeaders, "Content-Type", NULL);
+    //requestHeaders = curl_slist_sort_insert(requestHeaders, "Content-Type", NULL);
 
     if(!S3fsCurl::IsPublicBucket()){
-      string Signature = CalcSignatureV2("GET", "", "", date, (resource + "/"));
+      string Signature = CalcSignatureV2("GET", "", "", date, (resource /* + "/"*/));
       requestHeaders   = curl_slist_sort_insert(requestHeaders, "Authorization", string("AWS " + AWSAccessKeyId + ":" + Signature).c_str());
     }
 
@@ -3992,7 +3992,7 @@ string prepare_url(const char* url)
   string host;
   string path;
   string url_str = str(url);
-  string token =  str("/" + bucket);
+  /*string token =  str("/" + bucket);
   int bucket_pos = url_str.find(token);
   int bucket_length = token.size();
   int uri_length = 0;
@@ -4017,7 +4017,7 @@ string prepare_url(const char* url)
   }
 
   url_str = uri + host + path;
-
+*/
   FPRNINFO("URL changed is %s", url_str.c_str());
 
   return str(url_str);
